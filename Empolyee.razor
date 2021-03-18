@@ -1,0 +1,57 @@
+﻿@page "/employee"
+@using CRUD.Data
+@inject CRUD.Data.EmployeeService EmpService
+<NavLink href="addEmployee" class="nav-link">
+    <span class="oi oi-plus" aria-hidden="true"></span>Add employee
+</NavLink>
+
+<h1>Empolyee information </h1>
+
+@if(ListEmp == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Employee Id</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Country</th>
+                <th>City</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in ListEmp)
+            {
+                <tr>
+                    <td>@item.EmployeeID</td>
+                    <td>@item.Name</td>
+                    <td>@item.Gender</td>
+                    <td>@item.Country</td>
+                    <td>@item.City</td>
+                    <td>
+                        <a class="nav-link" href="EditeEmployee/@item.EmployeeID">
+                            <span class="oi oi-pencil" aria-hidden="true"></span>Edit
+                        </a>
+                        <a class="nav-link" href="DeleteEmployee/@item.EmployeeID">
+                            <span class="oi oi-pencil" aria-hidden="true"></span>Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    
+    List<EmployeeInfo> ListEmp = new List<EmployeeInfo>();
+    protected override async Task OnInitializedAsync()
+    {
+        ListEmp = await Task.Run( ()=> EmpService.GetEmployee().ToList());
+    }
+}
